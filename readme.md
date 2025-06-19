@@ -123,4 +123,5 @@ This project is licensed under the MIT License \- see the LICENSE file (if appli
 ---
 
 **Sources**  
-1\. [https://github.com/iDarkshotOP/simple-todo-list](https://github.com/iDarkshotOP/simple-todo-list)
+1\. [https://github.com/iDarkshotOP/simple-todo-list](https://github.com/iDarkshotOP/simple-todo-list)\
+2\. Gemini AI 2.5 Flash used for fast development and readme creation
