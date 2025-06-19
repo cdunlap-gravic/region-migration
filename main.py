@@ -343,13 +343,13 @@ def main():
             print_and_write(f"/tp {src_coords[0]} {src_coords[1]} {src_coords[2]}")
             if settings['creative_mode']:
                 print_and_write("/gamemode creative")
-            print_and_write(f"//sel box {src_coords[0]},{src_coords[1]},{src_coords[2]} {src_coords[3]},{src_coords[4]},{src_coords[5]}")
-            print_and_write(f"//copy")
+            print_and_write(f"//sel {src_coords[0]},{src_coords[1]},{src_coords[2]} {src_coords[3]},{src_coords[4]},{src_coords[5]}")
+            print_and_write(f"//copy -be")
             print_and_write(f"/mvtp {settings['target_world']}")
             print_and_write(f"/tp {target_coords[0]} {target_coords[1]} {target_coords[2]}")
             if settings['creative_mode']:
                 print_and_write("/gamemode creative")
-            print_and_write(f"//paste\n") # Kept one newline for spacing between regions
+            print_and_write(f"//paste -be\n") # Kept one newline for spacing between regions
 
     # NEW: Final message about file saving, after all commands are written
     if settings['save_to_file'] and output_file_handle:
