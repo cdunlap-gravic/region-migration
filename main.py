@@ -1,4 +1,5 @@
 import math
+import os # NEW: Import os module for current working directory display
 
 def display_header(header_type="default"):
     """Displays a formatted header based on the type."""
@@ -58,7 +59,7 @@ def get_input(prompt, default_value=None, value_type=str):
             display_prompt = prompt
             display_default_str = None
             if default_value is not None:
-                # Format default value for display as a string
+                # MODIFIED: Ensure default_value is correctly formatted for display if it's a tuple
                 if value_type == tuple and isinstance(default_value, tuple):
                     display_default_str = ','.join(map(str, default_value))
                 else:
@@ -229,11 +230,14 @@ def main():
         'creative_mode': None, # True/False
         'source_bounding_boxes': [],
         'target_paste_origin': None, # Stored as tuple of ints
-        'sub_region_size': None # Stored as int
+        'sub_region_size': None, # Stored as int
+        'save_to_file': None, # NEW: True/False flag for saving to file
+        'output_filename': None # NEW: Stores the filename for output
     }
     
     # Store initial defaults for first run
     initial_creative_mode_default = True
+    initial_save_to_file_default = True # NEW: Default to saving to file
 
     display_header(header_type="welcome")
 
@@ -244,8 +248,12 @@ def main():
             settings['target_world'] = get_input("Target World Name")
             settings['creative_mode'] = get_yes_no_input("Creative Mode needed?", default_value=initial_creative_mode_default)
             settings['source_bounding_boxes'] = get_bounding_boxes()
-            settings['target_paste_origin'] = get_input("Target Paste Origin (X,Y,Z)", default_value="0,0,0", value_type=tuple) # Provide string default for first run
+            settings['target_paste_origin'] = get_input("Target Paste Origin (X,Y,Z)", default_value=(0,0,0), value_type=tuple) 
             settings['sub_region_size'] = get_input("Sub-Region Size", default_value=64, value_type=int)
+            # NEW: Prompts for file output settings
+            settings['save_to_file'] = get_yes_no_input("Save commands to a file?", default_value=initial_save_to_file_default)
+            if settings['save_to_file']:
+                settings['output_filename'] = get_input("Enter filename (e.g., commands.txt)", default_value="commands.txt")
         else: # Re-prompt after 'n' confirmation
             display_header(header_type="restart")
             settings['source_world'] = get_input("Source World Name", default_value=settings['source_world'])
@@ -255,6 +263,14 @@ def main():
             # Pass the actual tuple as default_value here; get_input will format it for display
             settings['target_paste_origin'] = get_input("Target Paste Origin (X,Y,Z)", default_value=settings['target_paste_origin'], value_type=tuple)
             settings['sub_region_size'] = get_input("Sub-Region Size", default_value=settings['sub_region_size'], value_type=int)
+            # NEW: Re-prompts for file output settings
+            settings['save_to_file'] = get_yes_no_input("Save commands to a file?", default_value=settings['save_to_file'])
+            if settings['save_to_file']:
+                # Ensure output_filename has a default if it was None before (e.g., if user changed from No to Yes)
+                filename_default = settings['output_filename'] if settings['output_filename'] else "commands.txt"
+                settings['output_filename'] = get_input("Enter filename (e.g., commands.txt)", default_value=filename_default)
+            else:
+                settings['output_filename'] = None # Clear filename if user opts out of saving
 
         # Calculate total sub-regions for confirmation
         all_sub_regions = []
@@ -278,6 +294,12 @@ def main():
         print("#" * 60)
         print(f"#{'CAUTION: Large operations will be generated!':^58}#")
         print(f"#{'THIS IS YOUR LAST CHANCE TO REVIEW AND CONFIRM!':^58}#")
+        # NEW: Add file output info to review
+        if settings['save_to_file']:
+            print(f"Output to File: Yes (Filename: {settings['output_filename']})")
+        else:
+            print("Output to File: No (Commands will only be printed to console)")
+        
         print("#" * 60)
 
         confirm = get_yes_no_input("Proceed with command generation?")
@@ -290,26 +312,49 @@ def main():
 
     # --- Generate Commands ---
     display_header(header_type="generating")
-    
+
+    output_file_handle = None # NEW: Initialize file handle
+    if settings['save_to_file']: # NEW: Check if saving to file is enabled
+        try:
+            # NEW: Open file using 'with' for automatic closing
+            output_file_handle = open(settings['output_filename'], 'w')
+            print(f"Commands will also be saved to '{settings['output_filename']}' in the current directory ({os.getcwd()})\n")
+        except IOError as e: # NEW: Error handling for file operations
+            print(f"ERROR: Could not open file '{settings['output_filename']}' for writing: {e}")
+            print("Commands will only be printed to console.")
+            settings['save_to_file'] = False # Disable file saving if error occurs
+            if output_file_handle: # Safety check, though 'with' should handle it
+                output_file_handle.close()
+
+    # NEW: Define a helper function to print to console AND write to file
+    def print_and_write(text):
+        print(text)
+        if settings['save_to_file'] and output_file_handle: # Check if file saving is enabled AND file is open
+            output_file_handle.write(text + '\n')
     sub_region_counter = 0
     for bbox_idx, bbox in enumerate(settings['source_bounding_boxes']):
         current_bbox_sub_regions = calculate_sub_regions(bbox, settings['sub_region_size'], settings['target_paste_origin'])
         
         for i, (src_coords, target_coords) in enumerate(current_bbox_sub_regions):
             sub_region_counter += 1
-            print(f"# --- SUB-REGION {sub_region_counter} of {total_sub_regions} (Source: {src_coords[0]},{src_coords[1]},{src_coords[2]} to {src_coords[3]},{src_coords[4]},{src_coords[5]} -> Target: {target_coords[0]},{target_coords[1]},{target_coords[2]}) ---")
-            print(f"/mvtp {settings['source_world']}\n")
-            print(f"/tp {src_coords[0]} {src_coords[1]} {src_coords[2]}")
+            # MODIFIED: All print() calls replaced with print_and_write()
+            print_and_write(f"# --- SUB-REGION {sub_region_counter} of {total_sub_regions} (Source: {src_coords[0]},{src_coords[1]},{src_coords[2]} to {src_coords[3]},{src_coords[4]},{src_coords[5]} -> Target: {target_coords[0]},{target_coords[1]},{target_coords[2]}) ---")
+            print_and_write(f"/mvtp {settings['source_world']}") 
+            print_and_write(f"/tp {src_coords[0]} {src_coords[1]} {src_coords[2]}")
             if settings['creative_mode']:
-                print("/gamemode creative")
-            print(f"//sel box {src_coords[0]},{src_coords[1]},{src_coords[2]} {src_coords[3]},{src_coords[4]},{src_coords[5]}")
-            print(f"//copy\n")
-            print(f"/mvtp {settings['target_world']}\n")
-            print(f"/tp {target_coords[0]} {target_coords[1]} {target_coords[2]}")
+                print_and_write("/gamemode creative")
+            print_and_write(f"//sel box {src_coords[0]},{src_coords[1]},{src_coords[2]} {src_coords[3]},{src_coords[4]},{src_coords[5]}")
+            print_and_write(f"//copy")
+            print_and_write(f"/mvtp {settings['target_world']}")
+            print_and_write(f"/tp {target_coords[0]} {target_coords[1]} {target_coords[2]}")
             if settings['creative_mode']:
-                print("/gamemode creative")
-            print(f"//paste\n")
+                print_and_write("/gamemode creative")
+            print_and_write(f"//paste\n") # Kept one newline for spacing between regions
 
+    # NEW: Final message about file saving, after all commands are written
+    if settings['save_to_file'] and output_file_handle:
+        print(f"\nAll commands successfully saved to '{settings['output_filename']}'.")
+    
     display_header(header_type="complete")
 
 if __name__ == "__main__":
