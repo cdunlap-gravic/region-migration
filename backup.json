@@ -1,0 +1,152 @@
+{
+  "version": 6,
+  "profiles": [
+    {
+      "version": 4,
+      "name": "TEST",
+      "links": [],
+      "addToHistory": "OFF",
+      "showHudMessage": "OFF",
+      "resumeRepeating": "OFF",
+      "useRatelimit": "ON",
+      "macros": [
+        {
+          "version": 6,
+          "addToHistory": false,
+          "showHudMessage": false,
+          "resumeRepeating": false,
+          "useRatelimit": true,
+          "conflictStrategy": "SUBMIT",
+          "sendMode": "SEND",
+          "activationType": "VANILLA",
+          "spaceTicks": 0,
+          "keybind": {
+            "version": 0,
+            "keyName": "key.keyboard.i",
+            "limitKeyName": "key.keyboard.unknown"
+          },
+          "altKeybind": {
+            "version": 0,
+            "keyName": "key.keyboard.unknown",
+            "limitKeyName": "key.keyboard.unknown"
+          },
+          "messages": [
+            {
+              "version": 1,
+              "string": "/say # --- SUB-REGION 1 of 4 (Source: 0,0,0 to 63,100,63 -\u003e Target: 0,0,0) ---",
+              "delayTicks": 0
+            },
+            {
+              "version": 1,
+              "string": "/say # --- SUB-REGION 4 of 4 (Source: 64,0,64 to 100,100,100 -\u003e Target: 64,0,64) ---",
+              "delayTicks": 0
+            },
+            {
+              "version": 1,
+              "string": "/mvtp test1",
+              "delayTicks": 0
+            },
+            {
+              "version": 1,
+              "string": "/tp 64 0 64",
+              "delayTicks": 20
+            },
+            {
+              "version": 1,
+              "string": "//sel box 64,0,64 100,100,100",
+              "delayTicks": 15
+            },
+            {
+              "version": 1,
+              "string": "//copy",
+              "delayTicks": 0
+            },
+            {
+              "version": 1,
+              "string": "/mvtp test2",
+              "delayTicks": 50
+            },
+            {
+              "version": 1,
+              "string": "/tp 64 0 64",
+              "delayTicks": 20
+            },
+            {
+              "version": 1,
+              "string": "//paste",
+              "delayTicks": 15
+            },
+            {
+              "version": 1,
+              "string": "/say",
+              "delayTicks": 100
+            },
+            {
+              "version": 1,
+              "string": "/say WorldEdit transfer job complete! All regions processed.",
+              "delayTicks": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": 4,
+      "name": "test 2",
+      "links": [],
+      "addToHistory": "OFF",
+      "showHudMessage": "OFF",
+      "resumeRepeating": "OFF",
+      "useRatelimit": "ON",
+      "macros": [
+        {
+          "version": 6,
+          "addToHistory": false,
+          "showHudMessage": false,
+          "resumeRepeating": false,
+          "useRatelimit": true,
+          "conflictStrategy": "SUBMIT",
+          "sendMode": "CYCLE",
+          "activationType": "HOLD",
+          "spaceTicks": 0,
+          "keybind": {
+            "version": 0,
+            "keyName": "key.keyboard.unknown",
+            "limitKeyName": "key.keyboard.unknown"
+          },
+          "altKeybind": {
+            "version": 0,
+            "keyName": "key.keyboard.unknown",
+            "limitKeyName": "key.keyboard.unknown"
+          },
+          "messages": [
+            {
+              "version": 1,
+              "string": "/command 1",
+              "delayTicks": 5
+            },
+            {
+              "version": 1,
+              "string": "/command 2",
+              "delayTicks": 0
+            },
+            {
+              "version": 1,
+              "string": "",
+              "delayTicks": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "spDefault": 0,
+  "mpDefault": 0,
+  "defaultConflictStrategy": "SUBMIT",
+  "defaultSendMode": "SEND",
+  "defaultActivationType": "HOLD",
+  "ratelimitCount": 4,
+  "ratelimitTicks": 20,
+  "ratelimitStrict": false,
+  "ratelimitSp": false
+}
