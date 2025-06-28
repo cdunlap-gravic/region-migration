@@ -61,8 +61,8 @@ BORDER_TYPE_DEMOS = {
         "title_style": "bold grey82",
         "message_style": "grey70"
     },
-    "Horizontals Only (Orange)": {
-        "box_type": box.HORIZONTALS, # Only shows top and bottom lines
+    "ROUNDED (Orange)": {
+        "box_type": box.ROUNDED, # Only shows top and bottom lines
         "border_style": "orange1",
         "title_style": "bold orange_red1",
         "message_style": "dark_orange3"

@@ -1,0 +1,20 @@
+{
+  "source_world": "PuertoParca",
+  "target_world": "smpplus",
+  "creative_mode": false,
+  "target_paste_origin": [
+    -288,
+    20,
+    -496
+  ],
+  "sub_region_size": 512,
+  "save_to_file": false,
+  "output_filename": null,
+  "mvtp_delay": 100,
+  "tp_delay": 50,
+  "copy_delay": 100,
+  "paste_delay": 350,
+  "generate_json": true,
+  "json_filename": "C:\\Users\\cjd7\\AppData\\Roaming\\ModrinthApp\\profiles\\Redstone_Dev_Build (1)\\config\\commandkeys.json",
+  "dry_run": false
+}

@@ -1,0 +1,41 @@
+# --- SUB-REGION 1 of 4 (Source: 0,0,0 to 63,100,63 -> Target: 0,0,0) ---
+/mvtp world1
+/tp 0 0 0
+//pos1 0,0,0
+//pos2 63,100,63
+//copy -be
+/mvtp world
+/tp 0 0 0
+//paste -be
+
+# --- SUB-REGION 2 of 4 (Source: 0,0,64 to 63,100,100 -> Target: 0,0,64) ---
+/mvtp world1
+/tp 0 0 64
+//pos1 0,0,64
+//pos2 63,100,100
+//copy -be
+/mvtp world
+/tp 0 0 64
+//paste -be
+
+# --- SUB-REGION 3 of 4 (Source: 64,0,0 to 100,100,63 -> Target: 64,0,0) ---
+/mvtp world1
+/tp 64 0 0
+//pos1 64,0,0
+//pos2 100,100,63
+//copy -be
+/mvtp world
+/tp 64 0 0
+//paste -be
+
+# --- SUB-REGION 4 of 4 (Source: 64,0,64 to 100,100,100 -> Target: 64,0,64) ---
+/mvtp world1
+/tp 64 0 64
+//pos1 64,0,64
+//pos2 100,100,100
+//copy -be
+/mvtp world
+/tp 64 0 64
+//paste -be
+
+/say WorldEdit transfer job complete! All regions processed.
